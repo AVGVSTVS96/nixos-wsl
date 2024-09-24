@@ -1,5 +1,5 @@
 {
-  # FIXME: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
+  # TODO: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
   # secrets,
   username,
   hostname,
@@ -7,12 +7,12 @@
   inputs,
   ...
 }: {
-  # FIXME: change to your tz! look it up with "timedatectl list-timezones"
+  # TODO: change to your tz! look it up with "timedatectl list-timezones"
   time.timeZone = "America/Los_Angeles";
 
   networking.hostName = "${hostname}";
 
-  # FIXME: change your shell here if you don't want fish
+  # TODO: change your shell here if you don't want fish
   programs.fish.enable = true;
   environment.pathsToLink = ["/share/fish"];
   environment.shells = [pkgs.fish];
@@ -21,21 +21,21 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  # FIXME: uncomment the next line to enable SSH
+  # TODO: uncomment the next line to enable SSH
   # services.openssh.enable = true;
 
   users.users.${username} = {
     isNormalUser = true;
-    # FIXME: change your shell here if you don't want fish
+    # TODO: change your shell here if you don't want fish
     shell = pkgs.fish;
     extraGroups = [
       "wheel"
-      # FIXME: uncomment the next line if you want to run docker without sudo
+      # TODO: uncomment the next line if you want to run docker without sudo
       # "docker"
     ];
-    # FIXME: add your own hashed password
+    # TODO: add your own hashed password
     # hashedPassword = "";
-    # FIXME: add your own ssh public key
+    # TODO: add your own ssh public key
     # openssh.authorizedKeys.keys = [
     #   "ssh-rsa ..."
     # ];
@@ -67,7 +67,7 @@
     autoPrune.enable = true;
   };
 
-  # FIXME: uncomment the next block to make vscode running in Windows "just work" with NixOS on WSL
+  # TODO: uncomment the next block to make vscode running in Windows "just work" with NixOS on WSL
   # solution adapted from: https://github.com/K900/vscode-remote-workaround
   # more information: https://github.com/nix-community/NixOS-WSL/issues/238 and https://github.com/nix-community/NixOS-WSL/issues/294
   # systemd.user = {
@@ -88,7 +88,7 @@
   nix = {
     settings = {
       trusted-users = [username];
-      # FIXME: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
+      # TODO: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
       # access-tokens = [
       #   "github.com=${secrets.github_token}"
       #   "gitlab.com=OAuth2:${secrets.gitlab_token}"
