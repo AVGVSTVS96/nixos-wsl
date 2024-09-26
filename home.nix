@@ -4,6 +4,7 @@
   pkgs,
   username,
   nix-index-database,
+  # inputs,
   ...
 }: let
   unstable-packages = with pkgs.unstable; [
@@ -30,6 +31,7 @@
     unzip
     vim
     wget
+    # inputs.nixvim.packages.${pkgs.system}.default
     zip
   ];
 

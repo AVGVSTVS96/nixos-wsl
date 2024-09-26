@@ -16,6 +16,7 @@
   inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
   # inputs.jeezyvim.url = "github:LGUG2Z/JeezyVim";
+  # inputs.nixvim.url = "github:azuwis/lazyvim-nixvim";
 
   outputs = inputs:
     with inputs; let
