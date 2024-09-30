@@ -40,7 +40,7 @@
 
     # TODO: you can add plugins, change keymaps etc using (jeezyvim.nixvimExtend {})
     # https://github.com/LGUG2Z/JeezyVim#extending
-    # jeezyvim
+    jeezyvim
 
     # key tools
     gh # for bootstrapping
@@ -134,6 +134,12 @@ in {
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
 
+    helix = {
+      enable = true;
+      settings.theme = "tokyonight";
+      settings.editor.true-color = true;
+    };
+
     git = {
       enable = true;
       package = pkgs.unstable.git;
@@ -188,6 +194,7 @@ in {
 
         set -U fish_greeting
 
+        fish_add_path --append /mnt/c/Users/IT-Support/scoop/apps/win32yank/current
         fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
       '';
       functions = {
