@@ -128,7 +128,7 @@ in {
       defaultOptions = ["--height 40%" "--layout=reverse" "--border"];
       fileWidgetCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
       fileWidgetOptions = [
-        "--preview 'if [ -d {} ]; then eza --tree --all --level=3 --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'"
+        "--preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'"
       ];
       changeDirWidgetCommand = "fd --type d --hidden --strip-cwd-prefix --exclude .git";
       changeDirWidgetOptions = ["--preview 'eza --tree --color=always {} | head -200'"];
@@ -241,11 +241,11 @@ in {
       settings = {
         manager = {
           show_hidden = true;
-          ratio = [ 1 2 5 ];
+          ratio = [1 2 5];
         };
       };
     };
-    
+
     fish = {
       enable = true;
       # TODO: run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
@@ -297,7 +297,7 @@ in {
                   fzf --preview "bat -n --color=always --line-range :500 {}" $argv
                 end
               end
-      '';
+        '';
       };
       shellAbbrs =
         {
@@ -331,7 +331,7 @@ in {
           lsa = "la";
           lsl = "eza --git --icons=always --color=always --long --no-user";
           ll = "eza --git --icons=always --color=always --long --no-user -all";
-          lt = "eza --git --icons=always --color=always --long --no-user -all --tree --level=2" ;
+          lt = "eza --git --icons=always --color=always --long --no-user -all --tree --level=2";
           lt2 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=3";
           lt3 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=4";
           ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
@@ -339,8 +339,8 @@ in {
       shellAliases = {
         jvim = "nvim";
         lvim = "nvim";
-        lspe="fzf --preview '$show_file_or_dir_preview'";
-        lsp="fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
+        lspe = "fzf --preview '$show_file_or_dir_preview'";
+        lsp = "fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
