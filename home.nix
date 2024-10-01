@@ -105,7 +105,6 @@ in {
     nix-index.enableFishIntegration = true;
     nix-index-database.comma.enable = true;
 
-    # TODO: disable this if you don't want to use the starship prompt
     starship.enable = true;
     starship.settings = {
       aws.disabled = true;
@@ -121,23 +120,66 @@ in {
       hostname.style = "bold green";
     };
 
-    # TODO: disable whatever you don't want
-    fzf.enable = true;
-    fzf.enableFishIntegration = true;
-    lsd.enable = true;
-    lsd.enableAliases = true;
-    zoxide.enable = true;
-    zoxide.enableFishIntegration = true;
-    zoxide.options = ["--cmd cd"];
+    fzf = {
+      enable = true;
+      # enableZshIntegration = true;
+      enableFishIntegration = true;
+      defaultCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
+      defaultOptions = ["--height 40%" "--layout=reverse" "--border"];
+      fileWidgetCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
+      fileWidgetOptions = [
+        "--preview 'if [ -d {} ]; then eza --tree --all --level=3 --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'"
+      ];
+      changeDirWidgetCommand = "fd --type d --hidden --strip-cwd-prefix --exclude .git";
+      changeDirWidgetOptions = ["--preview 'eza --tree --color=always {} | head -200'"];
+    };
+
+    # lsd.enable = true;
+    # lsd.enableAliases = true;
+    eza = {
+      enable = true;
+      git = true;
+      icons = true;
+    };
+
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+      options = ["--cmd cd"];
+    };
     broot.enable = true;
     broot.enableFishIntegration = true;
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
 
+    # bat = {
+    #   enable = true;
+    #   themes = {
+    #     tokyo-night = {
+    #       src = pkgs.fetchFromGitHub {
+    #         owner = "folke";
+    #         repo = "tokyonight.nvim";
+    #         rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
+    #         sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
+    #       };
+    #       file = "extras/sublime/tokyonight_night.tmTheme";
+    #     };
+    #   };
+    #   config = {
+    #     theme = "tokyo-night";
+    #   };
+    # };
+
     helix = {
       enable = true;
       settings.theme = "tokyonight";
       settings.editor.true-color = true;
+      settings.editor.mouse = true;
+      settings.editor.cursor-shape = {
+        insert = "bar";
+        normal = "block";
+        select = "block";
+      };
     };
 
     git = {
@@ -174,17 +216,43 @@ in {
       };
     };
 
+    # gh = {
+    #   enable = true;
+    #   gitCredentialHelper = {
+    #     enable = true;
+    #     hosts = ["https://github.com" "https://gist.github.com"];
+    #   };
+    # };
+
     lazygit.enable = true;
-    
+
+    # lazygit = {
+    #   enable = true;
+    #   settings = {
+    #   os.editPreset = "nvim";
+    #   git.paging.pager = "delta --dark --paging=never";
+    #   };
+    # };
+
     yazi = {
       enable = true;
       enableFishIntegration = true;
+      # enableZshIntegration = true;
+      settings = {
+        manager = {
+          show_hidden = true;
+          ratio = [ 1 2 5 ];
+        };
+      };
     };
     
     fish = {
       enable = true;
       # TODO: run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
       # fish_add_path --append /mnt/c/Users/<Your Windows Username>/scoop/apps/win32yank/0.1.1
+      # TODO: If scoop doesn't work, use chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
+      # fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
+
       interactiveShellInit = ''
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
 
@@ -200,6 +268,8 @@ in {
 
         fish_add_path --append /mnt/c/Users/IT-Support/scoop/apps/win32yank/current
         fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
+
+        set show_file_or_dir_preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'
       '';
       functions = {
         refresh = "source $HOME/.config/fish/config.fish";
@@ -212,6 +282,22 @@ in {
             set -gx $arr[1] $arr[2]
           end
         '';
+        _fzf_comprun = ''
+          set -l cmd $argv[1]
+          set -e argv[1]
+
+          switch "$cmd"
+              case "cd"
+                  fzf --preview 'eza --tree --color=always {} | head -200' $argv
+              case "export" "unset"
+                  fzf --preview "echo {}" $argv
+              case "ssh"
+                  fzf --preview 'dig {}' $argv
+              case '*'
+                  fzf --preview "bat -n --color=always --line-range :500 {}" $argv
+                end
+              end
+      '';
       };
       shellAbbrs =
         {
@@ -238,10 +324,23 @@ in {
         } // {
           yz = "yazi";
           lg = "lazygit";
+        } // {
+          l = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
+          la = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
+          ls = "l";
+          lsa = "la";
+          lsl = "eza --git --icons=always --color=always --long --no-user";
+          ll = "eza --git --icons=always --color=always --long --no-user -all";
+          lt = "eza --git --icons=always --color=always --long --no-user -all --tree --level=2" ;
+          lt2 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=3";
+          lt3 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=4";
+          ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
         };
       shellAliases = {
         jvim = "nvim";
         lvim = "nvim";
+        lspe="fzf --preview '$show_file_or_dir_preview'";
+        lsp="fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
