@@ -175,8 +175,12 @@ in {
     };
 
     lazygit.enable = true;
-
-    # TODO: This is my fish config - you can fiddle with it if you want
+    
+    yazi = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    
     fish = {
       enable = true;
       # TODO: run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
@@ -211,17 +215,13 @@ in {
       };
       shellAbbrs =
         {
-          gc = "nix-collect-garbage --delete-old";
-        }
-        # navigation shortcuts
-        // {
+          # gc = "nix-collect-garbage --delete-old";
+        } // {
           ".." = "cd ..";
           "..." = "cd ../../";
           "...." = "cd ../../../";
           "....." = "cd ../../../../";
-        }
-        # git shortcuts
-        // {
+        } // {
           gapa = "git add --patch";
           grpa = "git reset --patch";
           gst = "git status";
@@ -235,6 +235,9 @@ in {
           gsp = "git stash push -m";
           gsa = "git stash apply stash^{/";
           gsl = "git stash list";
+        } // {
+          yz = "yazi";
+          lg = "lazygit";
         };
       shellAliases = {
         jvim = "nvim";
