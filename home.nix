@@ -9,7 +9,7 @@
 }: let
   unstable-packages = with pkgs.unstable; [
     # TODO: select your core binaries that you always want on the bleeding-edge
-    bat
+    # bat
     bottom
     coreutils
     curl
@@ -152,23 +152,23 @@ in {
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
 
-    # bat = {
-    #   enable = true;
-    #   themes = {
-    #     tokyo-night = {
-    #       src = pkgs.fetchFromGitHub {
-    #         owner = "folke";
-    #         repo = "tokyonight.nvim";
-    #         rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
-    #         sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
-    #       };
-    #       file = "extras/sublime/tokyonight_night.tmTheme";
-    #     };
-    #   };
-    #   config = {
-    #     theme = "tokyo-night";
-    #   };
-    # };
+    bat = {
+      enable = true;
+      themes = {
+        tokyo-night = {
+          src = pkgs.fetchFromGitHub {
+            owner = "folke";
+            repo = "tokyonight.nvim";
+            rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
+            sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
+          };
+          file = "extras/sublime/tokyonight_night.tmTheme";
+        };
+      };
+      config = {
+        theme = "tokyo-night";
+      };
+    };
 
     helix = {
       enable = true;
@@ -224,15 +224,15 @@ in {
     #   };
     # };
 
-    lazygit.enable = true;
+    # lazygit.enable = true;
 
-    # lazygit = {
-    #   enable = true;
-    #   settings = {
-    #   os.editPreset = "nvim";
-    #   git.paging.pager = "delta --dark --paging=never";
-    #   };
-    # };
+    lazygit = {
+      enable = true;
+      settings = {
+      os.editPreset = "nvim";
+      git.paging.pager = "delta --dark --paging=never";
+      };
+    };
 
     yazi = {
       enable = true;
@@ -282,32 +282,18 @@ in {
             set -gx $arr[1] $arr[2]
           end
         '';
-        _fzf_comprun = ''
-          set -l cmd $argv[1]
-          set -e argv[1]
-
-          switch "$cmd"
-              case "cd"
-                  fzf --preview 'eza --tree --color=always {} | head -200' $argv
-              case "export" "unset"
-                  fzf --preview "echo {}" $argv
-              case "ssh"
-                  fzf --preview 'dig {}' $argv
-              case '*'
-                  fzf --preview "bat -n --color=always --line-range :500 {}" $argv
-                end
-              end
-        '';
       };
       shellAbbrs =
         {
           # gc = "nix-collect-garbage --delete-old";
-        } // {
+        }
+        // {
           ".." = "cd ..";
           "..." = "cd ../../";
           "...." = "cd ../../../";
           "....." = "cd ../../../../";
-        } // {
+        }
+        // {
           gapa = "git add --patch";
           grpa = "git reset --patch";
           gst = "git status";
@@ -321,14 +307,16 @@ in {
           gsp = "git stash push -m";
           gsa = "git stash apply stash^{/";
           gsl = "git stash list";
-        } // {
+        }
+        // {
           yz = "yazi";
           lg = "lazygit";
-        } // {
-          l = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
-          la = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
-          ls = "l";
-          lsa = "la";
+        }
+        // {
+          # l = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
+          # la = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
+          ls = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
+          lsa = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
           lsl = "eza --git --icons=always --color=always --long --no-user";
           ll = "eza --git --icons=always --color=always --long --no-user -all";
           lt = "eza --git --icons=always --color=always --long --no-user -all --tree --level=2";
