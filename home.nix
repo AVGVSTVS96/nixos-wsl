@@ -4,7 +4,8 @@
   pkgs,
   username,
   nix-index-database,
-  # inputs,
+  inputs,
+  # tokyonight,
   ...
 }: let
   unstable-packages = with pkgs.unstable; [
@@ -43,7 +44,7 @@
     jeezyvim
 
     # key tools
-    gh # for bootstrapping
+    # gh # for bootstrapping
     just
 
     # core languages
@@ -76,8 +77,10 @@
 in {
   imports = [
     nix-index-database.hmModules.nix-index
+    inputs.tokyonight.homeManagerModules.default
   ];
-
+  tokyonight.enable = true;
+  tokyonight.style = "night";
   home.stateVersion = "22.11";
 
   home = {
@@ -154,20 +157,20 @@ in {
 
     bat = {
       enable = true;
-      themes = {
-        tokyo-night = {
-          src = pkgs.fetchFromGitHub {
-            owner = "folke";
-            repo = "tokyonight.nvim";
-            rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
-            sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
-          };
-          file = "extras/sublime/tokyonight_night.tmTheme";
-        };
-      };
-      config = {
-        theme = "tokyo-night";
-      };
+      # themes = {
+      #   tokyo-night = {
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "folke";
+      #       repo = "tokyonight.nvim";
+      #       rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
+      #       sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
+      #     };
+      #     file = "extras/sublime/tokyonight_night.tmTheme";
+      #   };
+      # };
+      # config = {
+      #   theme = "tokyo-night";
+      # };
     };
 
     helix = {
@@ -216,21 +219,19 @@ in {
       };
     };
 
-    # gh = {
-    #   enable = true;
-    #   gitCredentialHelper = {
-    #     enable = true;
-    #     hosts = ["https://github.com" "https://gist.github.com"];
-    #   };
-    # };
-
-    # lazygit.enable = true;
+    gh = {
+      enable = true;
+      gitCredentialHelper = {
+        enable = true;
+        hosts = ["https://github.com" "https://gist.github.com"];
+      };
+    };
 
     lazygit = {
       enable = true;
       settings = {
-      os.editPreset = "nvim";
-      git.paging.pager = "delta --dark --paging=never";
+        os.editPreset = "nvim";
+        git.paging.pager = "delta --dark --paging=never";
       };
     };
 
@@ -241,7 +242,7 @@ in {
       settings = {
         manager = {
           show_hidden = true;
-          ratio = [1 2 5];
+          ratio = [1 3 4];
         };
       };
     };
@@ -323,6 +324,10 @@ in {
           lt2 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=3";
           lt3 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=4";
           ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
+        }
+        // {
+          nss = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration && sudo shutdown -h now";
+          ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
         };
       shellAliases = {
         jvim = "nvim";

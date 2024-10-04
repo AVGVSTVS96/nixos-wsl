@@ -16,6 +16,7 @@
   inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.jeezyvim.url = "github:LGUG2Z/JeezyVim";
+  inputs.tokyonight.url = "github:mrjones2014/tokyonight.nix";
   # inputs.nixvim.url = "github:azuwis/lazyvim-nixvim";
 
   outputs = inputs:
