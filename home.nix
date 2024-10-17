@@ -5,9 +5,13 @@
   username,
   nix-index-database,
   inputs,
+  config,
   # tokyonight,
   ...
 }: let
+  # toString is necessary to avoid the path expanding to /nix/store/...
+  # nixosConfigDir = builtins.toString ./.;
+
   unstable-packages = with pkgs.unstable; [
     # TODO: select your core binaries that you always want on the bleeding-edge
     # bat
@@ -32,8 +36,14 @@
     unzip
     vim
     wget
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "Monaspace"
+      ];
+    })
     # inputs.nixvim.packages.${pkgs.system}.default
     zip
+    neovim
   ];
 
   stable-packages = with pkgs; [
@@ -41,14 +51,19 @@
 
     # TODO: you can add plugins, change keymaps etc using (jeezyvim.nixvimExtend {})
     # https://github.com/LGUG2Z/JeezyVim#extending
-    jeezyvim
-
+    # jeezyvim
+    # lunarvim
+    
     # key tools
     # gh # for bootstrapping
     just
 
     # core languages
-    rustup
+    # rustup
+    
+    # to fix error in neovim
+    gcc
+    cargo
 
     # rust stuff
     cargo-cache
@@ -101,6 +116,11 @@ in {
       # pkgs.some-package
       # pkgs.unstable.some-other-package
     ];
+
+  home.file.".config/nvim" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
+    recursive = true;
+  };
 
   programs = {
     home-manager.enable = true;
@@ -330,8 +350,8 @@ in {
           ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
         };
       shellAliases = {
-        jvim = "nvim";
-        lvim = "nvim";
+        # jvim = "nvim";
+        # lvim = "nvim";
         lspe = "fzf --preview '$show_file_or_dir_preview'";
         lsp = "fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
