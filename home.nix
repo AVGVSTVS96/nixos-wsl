@@ -9,9 +9,6 @@
   # tokyonight,
   ...
 }: let
-  # toString is necessary to avoid the path expanding to /nix/store/...
-  # nixosConfigDir = builtins.toString ./.;
-
   unstable-packages = with pkgs.unstable; [
     # TODO: select your core binaries that you always want on the bleeding-edge
     # bat
@@ -20,6 +17,7 @@
     curl
     du-dust
     fd
+    ffmpeg
     findutils
     fx
     git
@@ -28,6 +26,9 @@
     jq
     killall
     mosh
+    nodejs_20
+    # nodePackages.npm
+    nodePackages.pnpm
     procs
     ripgrep
     sd
@@ -306,7 +307,7 @@ in {
       };
       shellAbbrs =
         {
-          # gc = "nix-collect-garbage --delete-old";
+          gc = "nix-collect-garbage --d";
         }
         // {
           ".." = "cd ..";
@@ -334,8 +335,6 @@ in {
           lg = "lazygit";
         }
         // {
-          # l = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
-          # la = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
           ls = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
           lsa = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
           lsl = "eza --git --icons=always --color=always --long --no-user";
@@ -350,8 +349,6 @@ in {
           ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
         };
       shellAliases = {
-        # jvim = "nvim";
-        # lvim = "nvim";
         lspe = "fzf --preview '$show_file_or_dir_preview'";
         lsp = "fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
