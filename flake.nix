@@ -15,9 +15,11 @@
   inputs.nix-index-database.url = "github:Mic92/nix-index-database";
   inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-  # inputs.jeezyvim.url = "github:LGUG2Z/JeezyVim";
   inputs.tokyonight.url = "github:mrjones2014/tokyonight.nix";
-  # inputs.nixvim.url = "github:azuwis/lazyvim-nixvim";
+  
+  # For vscode to just work
+  inputs.nix-ld.url = "github:Mic92/nix-ld";
+  inputs.nix-ld.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = inputs:
     with inputs; let
@@ -76,6 +78,8 @@
             [
               (configurationDefaults specialArgs)
               home-manager.nixosModules.home-manager
+              nix-ld.nixosModules.nix-ld
+              { programs.nix-ld.dev.enable = true; }
             ]
             ++ modules;
         };
