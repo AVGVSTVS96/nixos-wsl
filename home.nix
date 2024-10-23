@@ -2,6 +2,7 @@
   # TODO: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
   # secrets,
   pkgs,
+  lib,
   username,
   nix-index-database,
   inputs,
@@ -217,6 +218,10 @@ in {
       };
       userEmail = "bassim101@gmail.com"; # TODO: set your git email
       userName = "Bassim Shahidy"; #TODO: set your git username
+      signing = { 
+        key = "~/.ssh/id_ed25519";
+        signByDefault = true;
+      };
       extraConfig = {
         # TODO: uncomment the next lines if you want to be able to clone private https repos
         # url = {
@@ -227,6 +232,10 @@ in {
         #     insteadOf = "https://gitlab.com";
         #   };
         # };
+        gpg.format = "ssh";
+        rebase.autoStash = true;
+        rerere.enabled = true;
+        pull.rebase = true;
         push = {
           default = "current";
           autoSetupRemote = true;
@@ -247,6 +256,33 @@ in {
         hosts = ["https://github.com" "https://gist.github.com"];
       };
     };
+
+    ssh = {
+      enable = true;
+      # includes = [
+      #   (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
+      #     "/home/${username}/.ssh/config_external"
+      #   )
+      #   (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
+      #     "/Users/${username}/.ssh/config_external"
+      #   )
+      # ];
+      matchBlocks = {
+        "github.com" = {
+          identitiesOnly = true;
+          identityFile = [
+            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
+              "/home/${username}/.ssh/id_ed25519"
+            )
+            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
+              "/Users/${username}/.ssh/id_ed25519"
+            )
+          ];
+        };
+      };
+      addKeysToAgent = "yes";
+    };
+
 
     lazygit = {
       enable = true;
