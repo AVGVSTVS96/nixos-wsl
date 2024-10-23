@@ -61,7 +61,7 @@ return {
     theta.footer.opts.hl = "AlphaFooter"
 
     theta.config.layout = {
-      { type = "padding", val = 10 },
+      { type = "padding", val = 6 },
       theta.header,
       { type = "padding", val = 2 },
       theta.mru(0, vim.fn.getcwd(), 10),
