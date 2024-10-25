@@ -7,45 +7,31 @@
   nix-index-database,
   inputs,
   config,
-  # tokyonight,
   ...
 }: let
   unstable-packages = with pkgs.unstable; [
     # TODO: select your core binaries that you always want on the bleeding-edge
-    # bat
-    bottom
     coreutils
     curl
     du-dust
     fd
     ffmpeg
     findutils
-    fx
     git
     git-crypt
-    htop
     jq
     killall
     mosh
+    neovim
     nodejs_20
-    # nodePackages.npm
     nodePackages.pnpm
     procs
     ripgrep
     sd
     tmux
-    tree
-    unzip
     vim
     wget
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "Monaspace"
-      ];
-    })
-    # inputs.nixvim.packages.${pkgs.system}.default
-    zip
-    neovim
+    (pkgs.nerdfonts.override { fonts = [ "Monaspace" ]; })
   ];
 
   stable-packages = with pkgs; [
@@ -85,6 +71,7 @@
 
     # formatters and linters
     alejandra # nix
+    # nixfmt-rfc-style
     deadnix # nix
     nodePackages.prettier
     shellcheck
@@ -147,7 +134,6 @@ in {
 
     fzf = {
       enable = true;
-      # enableZshIntegration = true;
       enableFishIntegration = true;
       defaultCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
       defaultOptions = ["--height 40%" "--layout=reverse" "--border"];
@@ -159,8 +145,8 @@ in {
       changeDirWidgetOptions = ["--preview 'eza --tree --color=always {} | head -200'"];
     };
 
-    # lsd.enable = true;
-    # lsd.enableAliases = true;
+    bat.enable = true;
+
     eza = {
       enable = true;
       git = true;
@@ -172,28 +158,9 @@ in {
       enableFishIntegration = true;
       options = ["--cmd cd"];
     };
-    broot.enable = true;
-    broot.enableFishIntegration = true;
-    direnv.enable = true;
-    direnv.nix-direnv.enable = true;
 
-    bat = {
-      enable = true;
-      # themes = {
-      #   tokyo-night = {
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "folke";
-      #       repo = "tokyonight.nvim";
-      #       rev = "4b386e66a9599057587c30538d5e6192e3d1c181";
-      #       sha256 = "kxsNappeZSlUkPbxlgGZKKJGGZj2Ny0i2a+6G+8nH7s=";
-      #     };
-      #     file = "extras/sublime/tokyonight_night.tmTheme";
-      #   };
-      # };
-      # config = {
-      #   theme = "tokyo-night";
-      # };
-    };
+    # direnv.enable = true;
+    # direnv.nix-direnv.enable = true;
 
     helix = {
       enable = true;
@@ -306,9 +273,10 @@ in {
 
     fish = {
       enable = true;
-      # TODO: run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
+      # Run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
       # fish_add_path --append /mnt/c/Users/<Your Windows Username>/scoop/apps/win32yank/0.1.1
-      # TODO: If scoop doesn't work, use chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
+      #
+      # If scoop doesn't work, use chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
       # fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
 
       interactiveShellInit = ''
@@ -352,19 +320,13 @@ in {
           "....." = "cd ../../../../";
         }
         // {
-          gapa = "git add --patch";
-          grpa = "git reset --patch";
-          gst = "git status";
-          gdh = "git diff HEAD";
+          g = "git";
+          gs = "git status";
+          gss = "git status -s";
           gp = "git push";
-          gph = "git push -u origin HEAD";
-          gco = "git checkout";
-          gcob = "git checkout -b";
-          gcm = "git checkout master";
-          gcd = "git checkout develop";
-          gsp = "git stash push -m";
-          gsa = "git stash apply stash^{/";
-          gsl = "git stash list";
+          gpl = "git pull";
+          gcam = "git commit -a --amend --no-edit";
+          gpf = "git push --force-with-lease";
         }
         // {
           yz = "yazi";
@@ -381,8 +343,8 @@ in {
           ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
         }
         // {
-          nss = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration && sudo shutdown -h now";
           ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
+          nss = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration && sudo shutdown -h now";
         };
       shellAliases = {
         lspe = "fzf --preview '$show_file_or_dir_preview'";
