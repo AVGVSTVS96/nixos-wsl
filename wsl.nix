@@ -1,21 +1,17 @@
+{ variables, pkgs, inputs, ... }:
+let
+  hostname = variables.hostName;
+  username = variables.userName;
+in
 {
-  # TODO: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
-  # secrets,
-  username,
-  hostname,
-  pkgs,
-  inputs,
-  ...
-}: {
-  # TODO: change to your tz! look it up with "timedatectl list-timezones"
+  # TODO: Look up timezone with "timedatectl list-timezones"
   time.timeZone = "America/New_York";
 
   networking.hostName = "${hostname}";
 
-  # TODO: change your shell here if you don't want fish
   programs.fish.enable = true;
-  environment.pathsToLink = ["/share/fish"];
-  environment.shells = [pkgs.fish];
+  environment.pathsToLink = [ "/share/fish" ];
+  environment.shells = [ pkgs.fish ];
 
   environment.enableAllTerminfo = true;
 
@@ -26,7 +22,6 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    # TODO: change your shell here if you don't want fish
     shell = pkgs.fish;
     extraGroups = [
       "wheel"
@@ -42,9 +37,7 @@
   };
 
   home-manager.users.${username} = {
-    imports = [
-      ./home.nix
-    ];
+    imports = [ ./home.nix ];
   };
 
   system.stateVersion = "22.05";
@@ -67,31 +60,12 @@
     autoPrune.enable = true;
   };
 
-  # TODO: uncomment the next block to make vscode running in Windows "just work" with NixOS on WSL
-  # solution adapted from: https://github.com/K900/vscode-remote-workaround
-  # more information: https://github.com/nix-community/NixOS-WSL/issues/238 and https://github.com/nix-community/NixOS-WSL/issues/294
-  # systemd.user = {
-  #   paths.vscode-remote-workaround = {
-  #     wantedBy = ["default.target"];
-  #     pathConfig.PathChanged = "%h/.vscode-server/bin";
-  #   };
-  #   services.vscode-remote-workaround.script = ''
-  #     for i in ~/.vscode-server/bin/*; do
-  #       if [ -e $i/node ]; then
-  #         echo "Fixing vscode-server in $i..."
-  #         ln -sf ${pkgs.nodejs_18}/bin/node $i/node
-  #       fi
-  #     done
-  #   '';
-  # };
-
   nix = {
     settings = {
-      trusted-users = [username];
+      trusted-users = [ username ];
       # TODO: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
       # access-tokens = [
       #   "github.com=${secrets.github_token}"
-      #   "gitlab.com=OAuth2:${secrets.gitlab_token}"
       # ];
 
       accept-flake-config = true;

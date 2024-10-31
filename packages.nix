@@ -1,4 +1,4 @@
-{ pkgs, ... }: 
+{ pkgs, ... }:
 let
   unstable-packages = with pkgs.unstable; [
     coreutils
@@ -30,7 +30,7 @@ let
 
     # core languages
     # rustup
-    
+
     # dependencies for lazyvim
     gcc
     cargo
@@ -40,11 +40,8 @@ let
     cargo-expand
 
     # treesitter
-    tree-sitter
 
     # language servers
-    nodePackages.vscode-langservers-extracted # html, css, json, eslint
-    nodePackages.yaml-language-server
     nil # nix
 
     # formatters and linters

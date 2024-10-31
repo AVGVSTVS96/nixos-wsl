@@ -1,14 +1,15 @@
 {
-  # TODO: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
   # secrets,
-  pkgs,
-  lib,
-  username,
+  variables,
   nix-index-database,
   inputs,
   config,
   ...
-}: {
+}:
+let
+  username = variables.userName;
+in
+{
   imports = [
     nix-index-database.hmModules.nix-index
     inputs.tokyonight.homeManagerModules.default
@@ -17,18 +18,21 @@
   ];
   tokyonight.enable = true;
   tokyonight.style = "night";
-  home.stateVersion = "22.11";
-
   home = {
+    stateVersion = "22.11";
     username = "${username}";
     homeDirectory = "/home/${username}";
 
-    sessionVariables.EDITOR = "nvim";
-    sessionVariables.SHELL = "/etc/profiles/per-user/${username}/bin/fish";
+    sessionVariables = {
+      EDITOR = "nvim";
+      SHELL = "/etc/profiles/per-user/${username}/bin/fish";
+    };
   };
-
-  home.file.".config/nvim" = {
-    source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
-    recursive = true;
+  xdg.enable = true;
+  xdg.configFile = {
+    "nvim" = {
+      source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
+      recursive = true;
+    };
   };
 }

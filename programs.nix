@@ -1,4 +1,7 @@
-{ lib, pkgs, username, ... }:
+{ lib, pkgs, variables, ... }:
+let
+  username = variables.userName;
+in
 {  
     programs = {
     home-manager.enable = true;
@@ -233,6 +236,7 @@
         }
         // {
           ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
+          nb = "git add . && sudo nixos-rebuild build --flake /tmp/configuration";
           nss = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration && sudo shutdown -h now";
         };
       shellAliases = {
