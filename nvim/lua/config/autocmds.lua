@@ -9,3 +9,10 @@
 -- })
 
 vim.cmd([[highlight WinSeparator guifg=#3C3F47]])
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "nix" },
+  callback = function()
+    vim.b.autoformat = false
+  end,
+})
