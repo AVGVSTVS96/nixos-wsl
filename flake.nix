@@ -18,7 +18,6 @@
 
     tokyonight.url = "github:mrjones2014/tokyonight.nix";
 
-    # For vscode to just work
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -39,27 +38,6 @@
         inherit nixpkgs nixpkgs-unstable;
       };
 
-      nixpkgsConfig = {
-        allowUnfree = true;
-        permittedInsecurePackages = [ ];
-      };
-
-      nixpkgsWithOverlays =
-        system:
-        import nixpkgs {
-          inherit system;
-          config = nixpkgsConfig;
-          overlays = [
-            nur.overlay
-            (_final: prev: {
-              unstable = import nixpkgs-unstable {
-                inherit (prev) system;
-                config = nixpkgsConfig;
-              };
-            })
-          ];
-        };
-
       args = {
         inherit
           variables
@@ -74,7 +52,6 @@
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        pkgs = nixpkgsWithOverlays system;
         specialArgs = args;
 
         modules = [
@@ -91,6 +68,7 @@
           { programs.nix-ld.dev.enable = true; }
           nixos-wsl.nixosModules.wsl
           ./wsl.nix
+          ./nixpkgs.nix
         ];
       };
     };
