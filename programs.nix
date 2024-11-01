@@ -1,9 +1,11 @@
 { lib, pkgs, variables, ... }:
 let
-  username = variables.userName;
+  userName = variables.userName;
+  fullName = variables.fullName;
+  email = variables.email;
 in
-{  
-    programs = {
+{
+  programs = {
     home-manager.enable = true;
     nix-index.enable = true;
     nix-index.enableFishIntegration = true;
@@ -11,15 +13,10 @@ in
 
     starship.enable = true;
     starship.settings = {
-      aws.disabled = true;
-      gcloud.disabled = true;
-      kubernetes.disabled = false;
       git_branch.style = "242";
       directory.style = "blue";
       directory.truncate_to_repo = false;
       directory.truncation_length = 8;
-      python.disabled = true;
-      ruby.disabled = true;
       hostname.ssh_only = false;
       hostname.style = "bold green";
     };
@@ -28,13 +25,17 @@ in
       enable = true;
       enableFishIntegration = true;
       defaultCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
-      defaultOptions = ["--height 40%" "--layout=reverse" "--border"];
+      defaultOptions = [
+        "--height 40%"
+        "--layout=reverse"
+        "--border"
+      ];
       fileWidgetCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
       fileWidgetOptions = [
         "--preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'"
       ];
       changeDirWidgetCommand = "fd --type d --hidden --strip-cwd-prefix --exclude .git";
-      changeDirWidgetOptions = ["--preview 'eza --tree --color=always {} | head -200'"];
+      changeDirWidgetOptions = [ "--preview 'eza --tree --color=always {} | head -200'" ];
     };
 
     bat.enable = true;
@@ -48,7 +49,7 @@ in
     zoxide = {
       enable = true;
       enableFishIntegration = true;
-      options = ["--cmd cd"];
+      options = [ "--cmd cd" ];
     };
 
     # direnv.enable = true;
@@ -56,13 +57,15 @@ in
 
     helix = {
       enable = true;
-      settings.theme = "tokyonight";
-      settings.editor.true-color = true;
-      settings.editor.mouse = true;
-      settings.editor.cursor-shape = {
-        insert = "bar";
-        normal = "block";
-        select = "block";
+      settings = {
+        theme = "tokyonight";
+        editor.true-color = true;
+        editor.mouse = true;
+        editor.cursor-shape = {
+          insert = "bar";
+          normal = "block";
+          select = "block";
+        };
       };
     };
 
@@ -75,13 +78,13 @@ in
         side-by-side = true;
         navigate = true;
       };
-      userEmail = "bassim101@gmail.com"; # TODO: set your git email
-      userName = "Bassim Shahidy"; #TODO: set your git username
-      signing = { 
-        key = "~/.ssh/id_ed25519";
-        signByDefault = true;
-      };
+      userEmail = email;
+      userName = fullName;
+      signing.key = "~/.ssh/id_ed25519";
+      signing.signByDefault = true;
       extraConfig = {
+        merge.conflictstyle = "diff3";
+        diff.colorMoved = "default";
         # TODO: uncomment the next lines if you want to be able to clone private https repos
         # url = {
         #   "https://oauth2:${secrets.github_token}@github.com" = {
@@ -95,53 +98,42 @@ in
         rebase.autoStash = true;
         rerere.enabled = true;
         pull.rebase = true;
-        push = {
-          default = "current";
-          autoSetupRemote = true;
-        };
-        merge = {
-          conflictstyle = "diff3";
-        };
-        diff = {
-          colorMoved = "default";
-        };
+        push.default = "current";
+        push.autoSetupRemote = true;
       };
     };
 
     gh = {
       enable = true;
-      gitCredentialHelper = {
-        enable = true;
-        hosts = ["https://github.com" "https://gist.github.com"];
-      };
+      gitCredentialHelper.enable = true;
+      gitCredentialHelper.hosts = [
+        "https://github.com"
+        "https://gist.github.com"
+      ];
     };
 
     ssh = {
       enable = true;
       # includes = [
       #   (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-      #     "/home/${username}/.ssh/config_external"
+      #     "/home/${userName}/.ssh/config_external"
       #   )
       #   (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-      #     "/Users/${username}/.ssh/config_external"
+      #     "/Users/${userName}/.ssh/config_external"
       #   )
       # ];
       matchBlocks = {
         "github.com" = {
           identitiesOnly = true;
           identityFile = [
-            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-              "/home/${username}/.ssh/id_ed25519"
-            )
-            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-              "/Users/${username}/.ssh/id_ed25519"
-            )
+            # TODO: See if home.homeDirectory can be used here
+            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux "/home/${userName}/.ssh/id_ed25519")
+            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin "/Users/${userName}/.ssh/id_ed25519")
           ];
         };
       };
       addKeysToAgent = "yes";
     };
-
 
     lazygit = {
       enable = true;
@@ -154,33 +146,31 @@ in
     yazi = {
       enable = true;
       enableFishIntegration = true;
-      # enableZshIntegration = true;
-      settings = {
-        manager = {
-          show_hidden = true;
-          ratio = [1 3 4];
-        };
+      settings.manager = {
+        show_hidden = true;
+        ratio = [ 1 3 4 ];
       };
     };
 
     fish = {
       enable = true;
-      # Run 'scoop install win32yank' on Windows, then add this line with your Windows username to the bottom of interactiveShellInit
+      # Scoop: run 'scoop install win32yank' on Windows, then add this line to the bottom of interactiveShellInit
       # fish_add_path --append /mnt/c/Users/<Your Windows Username>/scoop/apps/win32yank/0.1.1
       #
-      # If scoop doesn't work, use chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
+      # Chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
       # fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
 
       interactiveShellInit = ''
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
-
-        ${pkgs.lib.strings.fileContents (pkgs.fetchFromGitHub {
+        ${pkgs.lib.strings.fileContents (
+          pkgs.fetchFromGitHub {
             owner = "rebelot";
             repo = "kanagawa.nvim";
             rev = "de7fb5f5de25ab45ec6039e33c80aeecc891dd92";
             sha256 = "sha256-f/CUR0vhMJ1sZgztmVTPvmsAgp0kjFov843Mabdzvqo=";
           }
-          + "/extras/kanagawa.fish")}
+          + "/extras/kanagawa.fish"
+        )}
 
         set -U fish_greeting
 
