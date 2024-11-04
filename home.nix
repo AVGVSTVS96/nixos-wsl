@@ -7,7 +7,7 @@
   ...
 }:
 let
-  username = variables.userName;
+  inherit (variables) username;
 in
 {
   imports = [
@@ -20,12 +20,12 @@ in
   tokyonight.style = "night";
   home = {
     stateVersion = "22.11";
-    username = "${username}";
-    homeDirectory = "/home/${username}";
+    username = "${userName}";
+    homeDirectory = "/home/${userName}";
 
     sessionVariables = {
       EDITOR = "nvim";
-      SHELL = "/etc/profiles/per-user/${username}/bin/fish";
+      SHELL = "/etc/profiles/per-user/${userName}/bin/fish";
     };
   };
   xdg.enable = true;

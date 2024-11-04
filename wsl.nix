@@ -1,13 +1,12 @@
 { variables, pkgs, inputs, ... }:
 let
-  hostname = variables.hostName;
-  username = variables.userName;
+  inherit (variables) hostName userName;
 in
 {
   # TODO: Look up timezone with "timedatectl list-timezones"
   time.timeZone = "America/New_York";
 
-  networking.hostName = "${hostname}";
+  networking.hostName = "${hostName}";
 
   programs.fish.enable = true;
   environment.pathsToLink = [ "/share/fish" ];
@@ -20,7 +19,7 @@ in
   # TODO: uncomment the next line to enable SSH
   # services.openssh.enable = true;
 
-  users.users.${username} = {
+  users.users.${userName} = {
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [
@@ -36,7 +35,7 @@ in
     # ];
   };
 
-  home-manager.users.${username} = {
+  home-manager.users.${userName} = {
     imports = [ ./home.nix ];
   };
 
@@ -47,7 +46,7 @@ in
     wslConf.automount.root = "/mnt";
     wslConf.interop.appendWindowsPath = false;
     wslConf.network.generateHosts = false;
-    defaultUser = username;
+    defaultUser = userName;
     startMenuLaunchers = true;
 
     # Enable integration with Docker Desktop (needs to be installed)
@@ -62,7 +61,7 @@ in
 
   nix = {
     settings = {
-      trusted-users = [ username ];
+      trusted-users = [ userName ];
       # TODO: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
       # access-tokens = [
       #   "github.com=${secrets.github_token}"

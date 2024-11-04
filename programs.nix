@@ -1,8 +1,6 @@
 { lib, pkgs, variables, ... }:
 let
-  userName = variables.userName;
-  fullName = variables.fullName;
-  email = variables.email;
+  inherit (variables) fullName email userName;
 in
 {
   programs = {
