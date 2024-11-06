@@ -7,7 +7,7 @@
   ...
 }:
 let
-  inherit (variables) username;
+  inherit (variables) userName;
 in
 {
   imports = [
@@ -28,11 +28,13 @@ in
       SHELL = "/etc/profiles/per-user/${userName}/bin/fish";
     };
   };
-  xdg.enable = true;
-  xdg.configFile = {
-    "nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
-      recursive = true;
+  xdg = {
+    enable = true;
+    configFile = {
+      "nvim" = {
+        source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
+        recursive = true;
+      };
     };
   };
 }
