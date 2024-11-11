@@ -9,6 +9,7 @@ let
     findutils
     git
     git-crypt
+    graphite-cli
     jq
     killall
     mosh
@@ -22,6 +23,19 @@ let
     vim
     wget
     (pkgs.nerdfonts.override { fonts = [ "Monaspace" ]; })
+
+    
+    # language servers
+    nil # nix
+
+    # formatters and linters
+    # alejandra # nix
+    nixfmt-rfc-style
+    deadnix # nix
+    nodePackages.prettier
+    shellcheck
+    shfmt
+    statix # nix
   ];
 
   stable-packages = with pkgs; [
@@ -38,20 +52,6 @@ let
     # rust stuff
     cargo-cache
     cargo-expand
-
-    # treesitter
-
-    # language servers
-    nil # nix
-
-    # formatters and linters
-    # alejandra # nix
-    nixfmt-rfc-style
-    deadnix # nix
-    nodePackages.prettier
-    shellcheck
-    shfmt
-    statix # nix
   ];
 in
 {
