@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  unstable-packages = with pkgs.unstable; [
+  unstable-packages = with pkgs; [
     coreutils
     curl
     du-dust
@@ -38,7 +38,7 @@ let
     statix # nix
   ];
 
-  stable-packages = with pkgs; [
+  stable-packages = with pkgs.stable; [
     # gh # for bootstrapping
     just
 

@@ -69,7 +69,7 @@ in
 
     git = {
       enable = true;
-      package = pkgs.unstable.git;
+      package = pkgs.git;
       delta.enable = true;
       delta.options = {
         line-numbers = true;

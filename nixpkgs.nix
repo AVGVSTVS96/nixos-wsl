@@ -1,6 +1,6 @@
 { inputs, ... }:
 let
-  inherit (inputs) nixpkgs-unstable nur;
+  inherit (inputs) nixpkgs-stable nur;
 in {
   nixpkgs = {
     config = {
@@ -11,7 +11,7 @@ in {
     overlays = [
       nur.overlay
       (_final: prev: {
-        unstable = import nixpkgs-unstable {
+        stable = import nixpkgs-stable {
           inherit (prev) system config;
         };
       })
