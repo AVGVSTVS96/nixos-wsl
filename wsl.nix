@@ -83,6 +83,11 @@ in
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
 
+    # config.services.openssh.enable = true;
+    # config.services.openssh.hostKeys = [
+    #
+    # ];
+
     package = pkgs.nixVersions.latest;
     extraOptions = ''experimental-features = nix-command flakes'';
 
