@@ -6,6 +6,17 @@ in
   # TODO: Look up timezone with "timedatectl list-timezones"
   time.timeZone = "America/New_York";
 
+  services.openssh = {
+    enable = true;
+    hostKeys = [
+      {
+        # this is default in nixos, remove it, regen, and rekey
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
+  };
+
   networking.hostName = "${hostName}";
 
   programs.fish.enable = true;
@@ -15,9 +26,6 @@ in
   environment.enableAllTerminfo = true;
 
   security.sudo.wheelNeedsPassword = false;
-
-  # TODO: uncomment the next line to enable SSH
-  # services.openssh.enable = true;
 
   users.users.${userName} = {
     isNormalUser = true;
@@ -83,10 +91,7 @@ in
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
 
-    # config.services.openssh.enable = true;
-    # config.services.openssh.hostKeys = [
-    #
-    # ];
+
 
     package = pkgs.nixVersions.latest;
     extraOptions = ''experimental-features = nix-command flakes'';

@@ -1,6 +1,7 @@
-{ lib, pkgs, variables, ... }:
+{ pkgs, variables, ... }:
 let
-  inherit (variables) fullName email userName;
+  inherit (variables) fullName email;
+  # inherit (config.age.secrets) github-key;
 in
 {
   programs = {
@@ -78,7 +79,7 @@ in
       };
       userEmail = email;
       userName = fullName;
-      signing.key = "~/.ssh/id_ed25519";
+      signing.key = "/run/agenix/github-key";
       signing.signByDefault = true;
       extraConfig = {
         merge.conflictstyle = "diff3";
@@ -103,11 +104,11 @@ in
 
     gh = {
       enable = true;
-      gitCredentialHelper.enable = true;
-      gitCredentialHelper.hosts = [
-        "https://github.com"
-        "https://gist.github.com"
-      ];
+      # gitCredentialHelper.enable = true;
+      # gitCredentialHelper.hosts = [
+      #   "https://github.com"
+      #   "https://gist.github.com"
+      # ];
     };
 
     ssh = {
@@ -123,11 +124,7 @@ in
       matchBlocks = {
         "github.com" = {
           identitiesOnly = true;
-          identityFile = [
-            # TODO: See if home.homeDirectory can be used here
-            (lib.mkIf pkgs.stdenv.hostPlatform.isLinux "/home/${userName}/.ssh/id_ed25519")
-            (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin "/Users/${userName}/.ssh/id_ed25519")
-          ];
+          identityFile = [ "/run/agenix/github-key" ];
         };
       };
       addKeysToAgent = "yes";

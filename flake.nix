@@ -79,7 +79,11 @@
             ];
           }
           {
-            age.secrets.github-key.file = ./secrets/github-key.age;
+            age.secrets.github-key = { 
+              file = ./secrets/github-key.age;
+              owner = "${variables.userName}";
+              mode = "600";
+            };
           }
           ./wsl.nix
           ./nixpkgs.nix

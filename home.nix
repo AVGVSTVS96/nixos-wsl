@@ -13,6 +13,7 @@ in
   imports = [
     nix-index-database.hmModules.nix-index
     inputs.tokyonight.homeManagerModules.default
+    inputs.ragenix.homeManagerModules.age
     ./packages.nix
     ./programs.nix
   ];
