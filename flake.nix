@@ -73,18 +73,7 @@
           { programs.nix-ld.dev.enable = true; }
           nixos-wsl.nixosModules.wsl
           ragenix.nixosModules.default
-          {
-            environment.systemPackages = [
-              ragenix.packages.${system}.default
-            ];
-          }
-          {
-            age.secrets.github-key = { 
-              file = ./secrets/github-key.age;
-              owner = "${variables.userName}";
-              mode = "600";
-            };
-          }
+          ./secrets.nix
           ./wsl.nix
           ./nixpkgs.nix
         ];
