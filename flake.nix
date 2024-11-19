@@ -45,17 +45,31 @@
 
       args = {
         inherit
-          variables
-          system
-          secrets
-          inputs
-          self
-          nix-index-database
-          channels
-          ;
+        variables
+        system
+        secrets
+        inputs
+        self
+        nix-index-database
+        channels
+        ;
+      };
+      mkApp = scriptName: {
+        type = "app";
+        program = "${(nixpkgs.legacyPackages.x86_64-linux.writeShellApplication {
+          name = scriptName;
+          runtimeInputs = with nixpkgs.legacyPackages.x86_64-linux; [
+            coreutils
+            gnugrep
+          ];
+          text = builtins.readFile ./apps/${scriptName};
+        })}/bin/${scriptName}";
       };
     in
-    {
+      {
+      apps.x86_64-linux = {
+        "check-keys" = mkApp "check-keys";
+      };
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = args;

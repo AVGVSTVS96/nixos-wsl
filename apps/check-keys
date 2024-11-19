@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Expand ~ to full home directory path
+HOME_DIR="$HOME"
+KEY_PATHS=(
+  "${HOME_DIR}/.ssh/id_ed25519"
+  "${HOME_DIR}/.ssh/id_rsa"
+  "${HOME_DIR}/.secrets/master.age.key"
+  "/etc/ssh/ssh_host_ed25519_key"
+)
+
+check_key() {
+  local key_path="$1"
+  local perms
+  local readable
+
+  echo -e "${BLUE}Checking ${key_path}...${NC}"
+
+  # Check if file exists
+  if [[ ! -f "$key_path" ]]; then
+    echo -e "${YELLOW}✗ File not found${NC}"
+    return 1
+  fi
+
+  # Get file permissions and ownership
+  perms="$(stat -c "%a %U:%G" "$key_path")"
+  readable="$(if [[ -r "$key_path" ]]; then echo "yes"; else echo "no"; fi)"
+
+  echo -e "${GREEN}✓ Found key:${NC}"
+  echo "  - Permissions: $perms"
+  echo "  - Readable by current user: $readable"
+
+  # Check if permissions are secure (600 or stricter)
+  if [[ $(stat -c "%a" "$key_path") =~ ^[0-6]00$ ]]; then
+    echo -e "${GREEN}✓ Permissions are secure${NC}"
+  else
+    echo -e "${RED}! Warning: Permissions are too open${NC}"
+    echo "  Recommended: chmod 600 $key_path"
+  fi
+
+  # Simpler key validation - search whole file at once
+  if grep -q "PRIVATE KEY\|AGE-SECRET-KEY-" "$key_path" 2>/dev/null; then
+    echo -e "${GREEN}✓ File appears to be a valid key${NC}"
+    return 0
+  else
+    echo -e "${YELLOW}? Unable to validate key format${NC}"
+    return 1
+  fi
+}
+
+found_valid_key=false
+valid_keys=0
+total_keys=0
+
+echo -e "${BLUE}=== Checking all possible key locations ===${NC}\n"
+
+for key_path in "${KEY_PATHS[@]}"; do
+  total_keys=$((total_keys + 1))
+  if check_key "$key_path"; then
+    found_valid_key=true
+    valid_keys=$((valid_keys + 1))
+  fi
+  echo # Add blank line between checks
+done
+
+echo -e "${BLUE}=== Summary ===${NC}"
+echo -e "Total locations checked: ${total_keys}"
+echo -e "Valid keys found: ${valid_keys}"
+
+if [[ "$found_valid_key" = false ]]; then
+  echo -e "\n${RED}Warning: No valid keys found in any location.${NC}"
+  exit 1
+else
+  echo -e "\n${GREEN}At least one valid key was found.${NC}"
+  exit 0
+fi

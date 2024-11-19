@@ -9,7 +9,12 @@ in
   ];
 
   age = {
-    identityPaths = [ "${homeDir}/.secrets/master.age.key"];
+    # Private identity keys for decrypting secrets
+    # Defaults to ~/.ssh/id_ed25519 and ~/.ssh/id_rsa
+    identityPaths = [ 
+      "${homeDir}/.secrets/master.age.key"
+      "/etc/ssh/ssh_host_ed25519_key"
+    ];
     secrets = { 
       github-key = { 
         file = ./secrets/github-key.age;
