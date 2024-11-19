@@ -1,11 +1,11 @@
-{ config, variables, inputs, ... }:
+{ config, variables, inputs, system, ... }:
 let
   inherit (variables) userName;
   homeDir = config.users.users.${userName}.home;
 in 
   {
   environment.systemPackages = [
-    inputs.ragenix.packages."x86_64-linux".ragenix
+    inputs.ragenix.packages.${system}.ragenix
   ];
 
   age = {

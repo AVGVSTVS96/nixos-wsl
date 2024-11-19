@@ -46,6 +46,7 @@
       args = {
         inherit
           variables
+          system
           secrets
           inputs
           self
