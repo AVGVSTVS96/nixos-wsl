@@ -21,6 +21,11 @@ in
         owner = userName;
         mode = "600";
       };
+      github-pat = {
+        file = ./secrets/github-pat.age;
+        owner = userName;
+        mode = "600";
+      };
       graphite = {
         file = ./secrets/graphite.age;
         path = "${homeDir}/.config/graphite/user_config";

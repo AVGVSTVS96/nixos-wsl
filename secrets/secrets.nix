@@ -19,7 +19,11 @@ let
     age-master
   ];
 
-in {
+in
+
+  {
   "github-key.age".publicKeys = hostKeys ++ homeKeys ++ masterKeys;
+  "github-pat.age".publicKeys = hostKeys ++ homeKeys ++ masterKeys;
   "graphite.age".publicKeys = hostKeys ++ homeKeys ++ masterKeys;
 }
+
