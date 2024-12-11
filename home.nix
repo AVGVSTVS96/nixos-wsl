@@ -1,13 +1,8 @@
-{
-  # secrets,
-  variables,
-  nix-index-database,
-  inputs,
-  config,
-  ...
-}:
+{ variables, nix-index-database, inputs, config, ... }:
 let
   inherit (variables) userName;
+  inherit (config.lib.file) mkOutOfStoreSymlink;
+  inherit (config.home) homeDirectory;
 in
 {
   imports = [
@@ -33,7 +28,8 @@ in
     enable = true;
     configFile = {
       "nvim" = {
-        source = config.lib.file.mkOutOfStoreSymlink "/tmp/configuration/nvim";
+        # This needs to be an absolute path for mkOutOfStoreSymlink
+        source = mkOutOfStoreSymlink "${homeDirectory}/neovim-config";
         recursive = true;
       };
     };

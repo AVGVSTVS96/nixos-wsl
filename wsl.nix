@@ -2,10 +2,10 @@
 let
   inherit (variables) hostName userName;
   keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/HJtpzR8Ip/ma38TQSj1Uvl/rvvN3ogYsTbD8ERErL"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID/ppkYVMKZ+N/BINzfEvO8mWZMtx/UgbrHf5i4wpb77"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeABSDuLTLywoc86FINzl/YsUfJ0yqPhPan4DUzT2ME"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBZXcr0Kw5hXygTBzIbeh6RkBK+DifY2C8ywiIGC1jdj"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/HJtpzR8Ip/ma38TQSj1Uvl/rvvN3ogYsTbD8ERErL user@wsl-desktop"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID/ppkYVMKZ+N/BINzfEvO8mWZMtx/UgbrHf5i4wpb77 root@wsl-desktop"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeABSDuLTLywoc86FINzl/YsUfJ0yqPhPan4DUzT2ME user@wsl-laptop"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBZXcr0Kw5hXygTBzIbeh6RkBK+DifY2C8ywiIGC1jdj root@wsl-laptop"
   ];
 in
 {
@@ -67,10 +67,9 @@ in
   nix = {
     settings = {
       trusted-users = [ userName ];
-      # TODO: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
+      # To be able to clone private repos on GitHub, add PAT access-tokens
       access-tokens = [
-        # TODO: This is the oauth token from Github, not ssh key
-        # Test if this works
+        # This is the oauth token from Github, not ssh key
         "github.com=${config.age.secrets.github-pat.path}"
       ];
 

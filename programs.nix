@@ -1,7 +1,7 @@
-{ pkgs, variables, ... }:
+{ pkgs, variables, config, ... }:
 let
   inherit (variables) fullName email;
-  # inherit (config.age.secrets) github-key;
+  inherit (config.home) homeDirectory;
 in
 {
   programs = {
@@ -220,9 +220,9 @@ in
           ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
         }
         // {
-          ns = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration";
-          nb = "git add . && sudo nixos-rebuild build --flake /tmp/configuration";
-          nss = "git add . && sudo nixos-rebuild switch --flake /tmp/configuration && sudo shutdown -h now";
+          ns = "git add . && sudo nixos-rebuild switch --flake ${homeDirectory}/nixos-wsl";
+          nb = "git add . && sudo nixos-rebuild build --flake ${homeDirectory}/nixos-wsl";
+          nss = "git add . && sudo nixos-rebuild switch --flake ${homeDirectory}/nixos-wsl && sudo shutdown -h now";
         };
       shellAliases = {
         lspe = "fzf --preview '$show_file_or_dir_preview'";
