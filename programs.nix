@@ -212,12 +212,12 @@ in
         // {
           ls = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time";
           lsa = "eza --git --icons=always --color=always --long --no-user --no-permissions --no-filesize --no-time --all";
-          lsl = "eza --git --icons=always --color=always --long --no-user";
-          ll = "eza --git --icons=always --color=always --long --no-user -all";
-          lt = "eza --git --icons=always --color=always --long --no-user -all --tree --level=2";
-          lt2 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=3";
-          lt3 = "eza --git --icons=always --color=always --long --no-user -all --tree --level=4";
-          ltg = "eza --git --icons=always --color=always --long --no-user --tree --git-ignore";
+          lsl = "eza --git --icons=always --color=always --long";
+          ll = "eza --git --icons=always --color=always --long --all";
+          lt = "eza --git --icons=always --color=always --long --all --tree --level=2";
+          lt2 = "eza --git --icons=always --color=always --long --all --tree --level=3";
+          lt3 = "eza --git --icons=always --color=always --long --all --tree --level=4";
+          ltg = "eza --git --icons=always --color=always --long --tree --git-ignore";
         }
         // {
           ns = "git add . && sudo nixos-rebuild switch --flake ${homeDirectory}/nixos-wsl";
@@ -225,8 +225,8 @@ in
           nss = "git add . && sudo nixos-rebuild switch --flake ${homeDirectory}/nixos-wsl && sudo shutdown -h now";
         };
       shellAliases = {
-        lspe = "fzf --preview '$show_file_or_dir_preview'";
-        lsp = "fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview '$show_file_or_dir_preview'";
+        lspe = "fzf --preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'";
+        lsp = "fd --max-depth 1 --hidden --follow --exclude .git | fzf --preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'";
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
