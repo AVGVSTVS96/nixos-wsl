@@ -3,9 +3,6 @@ let
   inherit (variables) userName;
   inherit (config.lib.file) mkOutOfStoreSymlink;
   inherit (config.home) homeDirectory;
-  inherit (builtins) pathExists;
-  nvimRepo = "${homeDirectory}/neovim-config";
-  nvimFallbackConfig = "${homeDirectory}/nixos-wsl/nvim";
 in
 {
   imports = [
@@ -27,17 +24,12 @@ in
       SHELL = "/etc/profiles/per-user/${userName}/bin/fish";
     };
   };
-
   xdg = {
     enable = true;
     configFile = {
-      # TODO: Test this
       "nvim" = {
-        source = mkOutOfStoreSymlink (
-          if pathExists nvimRepo
-          then nvimRepo 
-          else nvimFallbackConfig
-        );
+        # This needs to be an absolute path for mkOutOfStoreSymlink
+        source = mkOutOfStoreSymlink "${homeDirectory}/neovim-config";
         recursive = true;
       };
     };

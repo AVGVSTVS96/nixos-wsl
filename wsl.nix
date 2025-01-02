@@ -1,4 +1,4 @@
-{ variables, pkgs, inputs, config, ... }:
+{ variables, pkgs, ... }:
 let
   inherit (variables) hostName userName;
   keys = [
@@ -62,39 +62,5 @@ in
     enable = true;
     enableOnBoot = true;
     autoPrune.enable = true;
-  };
-
-  nix = {
-    settings = {
-      trusted-users = [ userName ];
-      # To be able to clone private repos on GitHub, add PAT access-tokens
-      access-tokens = [
-        # This is the oauth token from Github, not ssh key
-        "github.com=${config.age.secrets.github-pat.path}"
-      ];
-
-      accept-flake-config = true;
-      auto-optimise-store = true;
-    };
-
-    registry = {
-      nixpkgs = {
-        flake = inputs.nixpkgs;
-      };
-    };
-
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs.outPath}"
-      "nixos-config=/etc/nixos/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
-
-    package = pkgs.nixVersions.latest;
-    extraOptions = ''experimental-features = nix-command flakes'';
-
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 7d";
-    };
   };
 }

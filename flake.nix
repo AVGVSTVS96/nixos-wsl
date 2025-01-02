@@ -90,7 +90,7 @@
           ragenix.nixosModules.default
           ./secrets.nix
           ./wsl.nix
-          ./nixpkgs.nix
+          ./nix.nix
         ];
       };
     };
