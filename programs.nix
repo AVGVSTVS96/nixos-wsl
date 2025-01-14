@@ -155,7 +155,7 @@ in
       # Chocolatey: run 'choco install win32yank' on Windows, then add this line to the bottom of interactiveShellInit:
       # fish_add_path --append /mnt/c/ProgramData/chocolatey/bin
 
-      interactiveShellInit = ''
+      interactiveShellInit = /*bash*/ ''
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
         ${pkgs.lib.strings.fileContents (
           pkgs.fetchFromGitHub {
@@ -245,6 +245,51 @@ in
           name = "sponge";
         }
       ];
+    };
+    tmux = {
+      enable = true;
+      plugins = [ pkgs.tmuxPlugins.catppuccin ];
+      extraConfig = /* bash */ ''
+          set -g default-terminal "$TERM"
+          set -ag terminal-overrides ",$TERM:Tc"
+
+          set -g mouse on
+          set -g history-limit 10000
+
+          # Make TMUX work with yazi
+          set -g allow-passthrough on
+          set -ga update-environment TERM
+          set -ga update-environment TERM_PROGRAM
+
+          # Avoid ESC delay
+          set -s escape-time 0
+
+          # Vim style pane selection
+          bind h select-pane -L
+          bind j select-pane -D 
+          bind k select-pane -U
+          bind l select-pane -R
+
+          # Start windows and panes at 1, not 0
+          set -g base-index 1
+          set -g pane-base-index 1
+          set-window-option -g pane-base-index 1
+          set-option -g renumber-windows on
+
+          # Use Alt-arrow keys without prefix key to switch panes
+          bind -n M-Left select-pane -L
+          bind -n M-Right select-pane -R
+          bind -n M-Up select-pane -U
+          bind -n M-Down select-pane -D
+
+          # Shift arrow to switch windows
+          bind -n S-Left  previous-window
+          bind -n S-Right next-window
+
+          # Shift Alt vim keys to switch windows
+          bind -n M-H previous-window
+          bind -n M-L next-window
+        '';
     };
   };
 }
