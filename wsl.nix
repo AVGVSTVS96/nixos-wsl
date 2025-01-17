@@ -27,6 +27,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   users.users.${userName} = {
+    home = "/home/${userName}";
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [
@@ -38,10 +39,6 @@ in
     # hashedPassword = "";
 
     openssh.authorizedKeys.keys = keys;
-  };
-
-  home-manager.users.${userName} = {
-    imports = [ ./home.nix ];
   };
 
   system.stateVersion = "22.05";

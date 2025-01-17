@@ -1,6 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, variables, ... }:
 let
+  inherit (variables) userName;
+
   unstable-packages = with pkgs; [
+    bun
     coreutils
     curl
     du-dust
@@ -19,10 +22,9 @@ let
     procs
     ripgrep
     sd
-    tmux
     vim
     wget
-    (pkgs.nerdfonts.override { fonts = [ "Monaspace" ]; })
+    # (pkgs.nerdfonts.override { fonts = [ "Monaspace" ]; })
 
     
     # language servers
@@ -55,5 +57,11 @@ let
   ];
 in
 {
-  home.packages = stable-packages ++ unstable-packages;
+  home-manager.users.${userName} = {
+    home.packages = stable-packages ++ unstable-packages;
+  };
+
+  fonts.packages = [
+    pkgs.nerd-fonts.monaspace
+  ];
 }

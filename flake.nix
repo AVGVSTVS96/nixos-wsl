@@ -30,7 +30,6 @@
     with inputs;
     let
       system = "x86_64-linux";
-      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
 
       variables = {
         hostName = "nixos";
@@ -82,6 +81,9 @@
               useUserPackages = true;
               backupFileExtension = "hm-backup";
               extraSpecialArgs = args;
+              users.${variables.userName} = {
+                imports = [ ./home.nix ];
+              };
             };
           }
           nix-ld.nixosModules.nix-ld
@@ -91,6 +93,8 @@
           ./secrets.nix
           ./wsl.nix
           ./nix.nix
+          ./packages.nix
+          ./programs.nix
         ];
       };
     };
