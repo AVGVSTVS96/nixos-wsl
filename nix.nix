@@ -35,7 +35,7 @@ in
       # To be able to clone private repos on GitHub, add PAT access-tokens
       access-tokens = [
         # This is the oauth token from Github, not ssh key
-        "github.com=${config.age.secrets.github-pat.path}"
+        # "github.com=${config.age.secrets.github-pat.path}"
       ];
 
       accept-flake-config = true;
