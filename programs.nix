@@ -7,18 +7,35 @@ in
   home-manager.users.${userName} = {
     programs = {
       home-manager.enable = true;
+
       nix-index.enable = true;
       nix-index.enableFishIntegration = true;
       nix-index-database.comma.enable = true;
 
-      starship.enable = true;
-      starship.settings = {
-        git_branch.style = "242";
-        directory.style = "blue";
-        directory.truncate_to_repo = false;
-        directory.truncation_length = 8;
-        hostname.ssh_only = false;
-        hostname.style = "bold green";
+      bat.enable = true;
+
+      eza = {
+        enable = true;
+        git = true;
+        icons = "auto";
+      };
+
+      zoxide = {
+        enable = true;
+        enableFishIntegration = true;
+        options = [ "--cmd cd" ];
+      };
+
+      starship = {
+        enable = true;
+        settings = {
+          git_branch.style = "242";
+          directory.style = "blue";
+          directory.truncate_to_repo = false;
+          directory.truncation_length = 8;
+          hostname.ssh_only = false;
+          hostname.style = "bold green";
+        };
       };
 
       fzf = {
@@ -38,18 +55,13 @@ in
         changeDirWidgetOptions = [ "--preview 'eza --tree --color=always {} | head -200'" ];
       };
 
-      bat.enable = true;
-
-      eza = {
-        enable = true;
-        git = true;
-        icons = "auto";
-      };
-
-      zoxide = {
+      yazi = {
         enable = true;
         enableFishIntegration = true;
-        options = [ "--cmd cd" ];
+        settings.manager = {
+          show_hidden = true;
+          ratio = [ 1 3 4 ];
+        };
       };
 
       # direnv.enable = true;
@@ -69,6 +81,17 @@ in
         };
       };
 
+      ssh = {
+        enable = true;
+        matchBlocks = {
+          "github.com" = {
+            identitiesOnly = true;
+            identityFile = [ "/run/agenix/github-key" ];
+          };
+        };
+        addKeysToAgent = "yes";
+      };
+
       git = {
         enable = true;
         package = pkgs.git;
@@ -85,7 +108,7 @@ in
         extraConfig = {
           merge.conflictstyle = "diff3";
           diff.colorMoved = "default";
-          # TODO: uncomment the next lines if you want to be able to clone private https repos
+          # Uncomment the next lines to clone private https repos
           # url = {
           #   "https://oauth2:${secrets.github_token}@github.com" = {
           #     insteadOf = "https://github.com";
@@ -112,39 +135,11 @@ in
         # ];
       };
 
-      ssh = {
-        enable = true;
-        # includes = [
-        #   (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-        #     "/home/${userName}/.ssh/config_external"
-        #   )
-        #   (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-        #     "/Users/${userName}/.ssh/config_external"
-        #   )
-        # ];
-        matchBlocks = {
-          "github.com" = {
-            identitiesOnly = true;
-            identityFile = [ "/run/agenix/github-key" ];
-          };
-        };
-        addKeysToAgent = "yes";
-      };
-
       lazygit = {
         enable = true;
         settings = {
           os.editPreset = "nvim";
           git.paging.pager = "delta --dark --paging=never";
-        };
-      };
-
-      yazi = {
-        enable = true;
-        enableFishIntegration = true;
-        settings.manager = {
-          show_hidden = true;
-          ratio = [ 1 3 4 ];
         };
       };
 
@@ -248,6 +243,7 @@ in
           }
         ];
       };
+
       tmux = {
         enable = true;
         plugins = [ pkgs.tmuxPlugins.catppuccin ];
