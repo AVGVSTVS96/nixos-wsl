@@ -1,4 +1,9 @@
-{ inputs, pkgs, config, variables, ... }:
+{
+  inputs,
+  pkgs,
+  variables,
+  ...
+}:
 let
   inherit (inputs) nixpkgs-stable nur;
   inherit (variables) userName;
@@ -26,6 +31,15 @@ in
       #     };
       #   });
       # })
+      (final: prev: {
+        bun = prev.bun.overrideAttrs (oldAttrs: {
+          version = "1.2.0";
+          src = prev.fetchurl {
+            url = "https://github.com/oven-sh/bun/releases/download/bun-v1.2.0/bun-linux-x64.zip";
+            sha256 = "sha256-B0fpcBILE6HaU0G3UaXwrxd4vYr9cLXEWPr/+VzppFM=";
+          };
+        });
+      })
     ];
   };
 
