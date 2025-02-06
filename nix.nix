@@ -16,7 +16,7 @@ in
     };
 
     overlays = [
-      nur.overlay
+      nur.overlays.default
       (_final: prev: {
         stable = import nixpkgs-stable {
           inherit (prev) system config;
@@ -33,10 +33,10 @@ in
       # })
       (final: prev: {
         bun = prev.bun.overrideAttrs (oldAttrs: {
-          version = "1.2.0";
+          version = "1.2.2";
           src = prev.fetchurl {
-            url = "https://github.com/oven-sh/bun/releases/download/bun-v1.2.0/bun-linux-x64.zip";
-            sha256 = "sha256-B0fpcBILE6HaU0G3UaXwrxd4vYr9cLXEWPr/+VzppFM=";
+            url = "https://github.com/oven-sh/bun/releases/download/bun-v1.2.2/bun-linux-x64.zip";
+            sha256 = "sha256-P077iv0fhKwqmMBGYciYVh0dNVJ9Awy0Vx6Zt8hfUHk=";
           };
         });
       })

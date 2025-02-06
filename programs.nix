@@ -172,16 +172,21 @@ in
             set show_file_or_dir_preview 'if test -d {}; eza --tree --all --level=3 --color=always {} | head -200; else; bat -n --color=always --line-range :500 {}; end'
           '';
         functions = {
-          refresh = "source $HOME/.config/fish/config.fish";
-          take = ''mkdir -p -- "$1" && cd -- "$1"'';
-          ttake = "cd $(mktemp -d)";
-          show_path = "echo $PATH | tr ' ' '\n'";
-          posix-source = ''
-            for i in (cat $argv)
-              set arr (echo $i |tr = \n)
-              set -gx $arr[1] $arr[2]
-            end
-          '';
+          refresh = # bash
+            "source $HOME/.config/fish/config.fish";
+          take = # bash
+            ''mkdir -p -- "$1" && cd -- "$1"'';
+          ttake = # bash
+            "cd $(mktemp -d)";
+          show_path = # bash
+            "echo $PATH | tr ' ' '\n'";
+          posix-source = # bash
+            ''
+              for i in (cat $argv)
+                set arr (echo $i |tr = \n)
+                set -gx $arr[1] $arr[2]
+              end
+            '';
         };
         shellAbbrs =
           {
