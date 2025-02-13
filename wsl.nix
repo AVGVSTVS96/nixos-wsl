@@ -12,11 +12,9 @@ in
   # TODO: Look up timezone with "timedatectl list-timezones"
   time.timeZone = "America/New_York";
 
-  services.openssh = {
-    enable = true;
-  };
+  services.openssh.enable = true;
 
-  networking.hostName = "${hostName}";
+  networking = { inherit hostName; };
 
   programs.fish.enable = true;
   environment.pathsToLink = [ "/share/fish" ];
