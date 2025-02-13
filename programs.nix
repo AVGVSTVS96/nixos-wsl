@@ -106,6 +106,7 @@ in
         signing.key = "/run/agenix/github-key";
         signing.signByDefault = true;
         extraConfig = {
+          core.autocrlf = "input";
           merge.conflictstyle = "diff3";
           diff.colorMoved = "default";
           # Uncomment the next lines to clone private https repos
