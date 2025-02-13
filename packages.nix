@@ -6,42 +6,37 @@ let
     bun
     coreutils
     curl
-    du-dust
+    du-dust    # disk usage utility
     fd
     ffmpeg
     findutils
     git
-    git-crypt
     graphite-cli
     jq
-    killall
-    mosh
+    # mosh     # mobile shell, SSH alternative
     neovim
     nodejs_20
     nodePackages.pnpm
-    procs
+    procs      # better ps
     ripgrep
-    sd
+    sd         # simpler sed alternative
     vim
     wget
-    # (pkgs.nerdfonts.override { fonts = [ "Monaspace" ]; })
 
     
     # language servers
     nil # nix
 
     # formatters and linters
-    # alejandra # nix
     nixfmt-rfc-style
     deadnix # nix
+    statix # nix
     nodePackages.prettier
     shellcheck
     shfmt
-    statix # nix
   ];
 
   stable-packages = with pkgs.stable; [
-    # gh # for bootstrapping
     just
 
     # core languages
@@ -52,8 +47,8 @@ let
     cargo
 
     # rust stuff
-    cargo-cache
-    cargo-expand
+    # cargo-cache
+    # cargo-expand
   ];
 in
 {
