@@ -16,7 +16,7 @@ let
     # mosh     # mobile shell, SSH alternative
     neovim
     nodejs_20
-    nodePackages.pnpm
+    pnpm
     procs      # better ps
     ripgrep
     sd         # simpler sed alternative
