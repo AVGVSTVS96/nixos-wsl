@@ -1,6 +1,6 @@
 { variables, nix-index-database, inputs, config, osConfig, ... }:
 let
-  inherit (variables) userName;
+  inherit (variables) userName stateVersion;
   inherit (config.lib.file) mkOutOfStoreSymlink;
   inherit (osConfig.users.users.${userName}) home;
 in
@@ -13,7 +13,7 @@ in
   tokyonight.enable = true;
   tokyonight.style = "night";
   home = {
-    stateVersion = "22.11";
+    inherit stateVersion;
     username = "${userName}";
     homeDirectory = home;
 

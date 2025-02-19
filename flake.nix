@@ -36,6 +36,7 @@
         userName = "nixos";
         fullName = "Bassim Shahidy";
         email = "bassim101@gmail.com";
+        stateVersion = "22.11";
       };
 
       channels = {
