@@ -37,6 +37,7 @@
         fullName = "Bassim Shahidy";
         email = "bassim101@gmail.com";
         stateVersion = "24.11";
+        timezone = "America/New_York";
       };
 
       channels = {

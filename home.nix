@@ -1,8 +1,16 @@
-{ variables, nix-index-database, inputs, config, osConfig, ... }:
+{
+  variables,
+  nix-index-database,
+  inputs,
+  config,
+  osConfig,
+  ...
+}:
 let
   inherit (variables) userName stateVersion;
   inherit (config.lib.file) mkOutOfStoreSymlink;
-  inherit (osConfig.users.users.${userName}) home;
+  homeDirectory = osConfig.users.users.${userName}.home;
+  username = userName;
 in
 {
   imports = [
@@ -13,9 +21,11 @@ in
   tokyonight.enable = true;
   tokyonight.style = "night";
   home = {
-    inherit stateVersion;
-    username = "${userName}";
-    homeDirectory = home;
+    inherit
+      stateVersion
+      username
+      homeDirectory
+      ;
 
     sessionVariables = {
       EDITOR = "nvim";
@@ -27,7 +37,7 @@ in
     configFile = {
       "nvim" = {
         # This needs to be an absolute path for mkOutOfStoreSymlink
-        source = mkOutOfStoreSymlink "${home}/neovim-config";
+        source = mkOutOfStoreSymlink "${homeDirectory}/neovim-config";
         recursive = true;
       };
     };
