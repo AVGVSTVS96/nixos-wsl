@@ -22,24 +22,24 @@ in
           inherit (prev) system config;
         };
       })
-      (final: prev: {
-        graphite-cli = prev.graphite-cli.overrideAttrs (oldAttrs: {
-          version = "1.5.3";
-          src = prev.fetchurl {
-            url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-1.5.3.tgz";
-            hash = "sha256-hWr4HOpcNXEpdboeHige5nliVCLY3RukMVh2xRKGIlI=";
-          };
-        });
-      })
-      (final: prev: {
-        bun = prev.bun.overrideAttrs (oldAttrs: {
-          version = "1.2.2";
-          src = prev.fetchurl {
-            url = "https://github.com/oven-sh/bun/releases/download/bun-v1.2.2/bun-linux-x64.zip";
-            sha256 = "sha256-P077iv0fhKwqmMBGYciYVh0dNVJ9Awy0Vx6Zt8hfUHk=";
-          };
-        });
-      })
+      # (final: prev: {
+      #   graphite-cli = prev.graphite-cli.overrideAttrs (oldAttrs: {
+      #     version = "1.5.3";
+      #     src = prev.fetchurl {
+      #       url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-1.5.3.tgz";
+      #       hash = "sha256-hWr4HOpcNXEpdboeHige5nliVCLY3RukMVh2xRKGIlI=";
+      #     };
+      #   });
+      # })
+      # (final: prev: {
+      #   bun = prev.bun.overrideAttrs (oldAttrs: {
+      #     version = "1.2.2";
+      #     src = prev.fetchurl {
+      #       url = "https://github.com/oven-sh/bun/releases/download/bun-v1.2.2/bun-linux-x64.zip";
+      #       sha256 = "sha256-P077iv0fhKwqmMBGYciYVh0dNVJ9Awy0Vx6Zt8hfUHk=";
+      #     };
+      #   });
+      # })
     ];
   };
 
